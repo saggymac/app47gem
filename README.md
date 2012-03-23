@@ -8,5 +8,6 @@ Infancy. Focused on my initial needs, which was simply uploading builds. But eve
 
 ## Dependencies
 This gem uses:
-* [rest-client](http://rubygems.org/gems/rest-client)
-* [json](http://rubygems.org/gems/json)
+
+*   [rest-client](http://rubygems.org/gems/rest-client)
+*   [json](http://rubygems.org/gems/json)
