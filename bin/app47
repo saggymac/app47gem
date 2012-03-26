@@ -1,0 +1,9 @@
+#!/usr/bin/env ruby
+
+#$LOAD_PATH << File.dirname(__FILE__) + '/../lib/app47'
+#$LOAD_PATH << File.dirname(__FILE__) + '/../lib/app47/cli'
+#puts $LOAD_PATH
+
+require 'app47/cli/app.rb'
+
+App47::CLI::CommandLineApp.run( *ARGV)
