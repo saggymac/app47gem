@@ -1,5 +1,7 @@
 require 'app47/cli/usage_error.rb'
 
+require 'yaml'
+
 
 module App47
   module CLI
@@ -12,9 +14,30 @@ module App47
         new.run(*args) 
       end      
 
+
+      #
+      # Document this so folks know what options are supported in the RC file.
+      #
+      # :apiKey
+      # :appId
+      # 
+      def read_rc_file
+        
+        file = File.join( ENV['HOME'], '.app47rc') 
+        if File.exists? file 
+          config_options = YAML.load_file( file) 
+          @options.merge!( config_options)
+        end
+
+      end
+
+
       def initialize
         @options = {}
+        
+        read_rc_file
       end
+      
 
       # @param [OptionParser] op the option parser      
       def define_opts( op )

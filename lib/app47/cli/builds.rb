@@ -18,8 +18,6 @@ module App47
       def define_opts( op )
         super( op)
 
-
-
         op.on( '-aMANDATORY', '--appId=MANDATORY', 'application identifier') { |appId|
           @options[:appId] = appId
         }

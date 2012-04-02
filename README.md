@@ -6,7 +6,7 @@ This gem was crafted to help folks interact with the App47 (http://www.app47.com
 ## Current Status
 Infancy. Focused on my initial needs, which was simply uploading builds. But everything starts somewhere
 
-Added an gem executable 'app47' to wrap the lib code.
+Added a gem executable 'app47' to wrap the lib code.
 
 >Usage: app47 builds subcmd [options]
 >Sub commands: create read
@@ -22,6 +22,8 @@ Added an gem executable 'app47' to wrap the lib code.
 >Creating a new build (e.g., posting a build):
 >  app47 builds create -k <apiKey> -a appId -V vers -f buildFilePath \[-n notes\] \[--makeActive\]
 >
+
+Added support for a $HOME/.app47rc file to set global apiKey and appId settings. Command line switches will override.
 
 ## Dependencies
 This gem uses:
