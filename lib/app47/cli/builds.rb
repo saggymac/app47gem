@@ -100,7 +100,10 @@ module App47
 
         bid = @options[:buildId]
 
-        client = BuildsClient.new( @options[:apiKey], @options[:appId], @options[:platform])
+        client = BuildsClient.new( @options[:appId], @options[:platform])
+        client.api_token = @options[:apiKey]
+        client.app_url = @options[:apiHost]
+
         resp = client.read( bid)
         print_json resp
       end
@@ -125,7 +128,9 @@ module App47
       def create
         builds_validate
 
-        client = BuildsClient.new( @options[:apiKey], @options[:appId], @options[:platform])
+        client = BuildsClient.new( @options[:appId], @options[:platform])
+        client.api_token = @options[:apiKey]
+        client.app_url = @options[:apiHost]
 
         vers = @options[:version]
         raise RuntimeError.new( "Version #{vers} already exists") if build_exists?( client, vers)

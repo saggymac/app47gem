@@ -5,14 +5,17 @@ Gem::Specification.new do |s|
   s.description = 'A gem that provides wrappers for working with the App47 APIs'
   s.author = "Scott A. Guyer"
   s.email = 'support@app47.com'
-  s.files = [ 'lib/app47/builds_client.rb', 
+  s.files = [ 'lib/app47/builds_client.rb',
+      'lib/app47/users_client.rb',
     'lib/app47/cli/app.rb',
     'lib/app47/cli/builds.rb',
     'lib/app47/cli/command.rb',
-    'lib/app47/cli/symbol_hash.rb']
+    'lib/app47/cli/symbol_hash.rb',
+    'lib/app47/cli/users.rb']
   s.homepage = 'http://app47.com/wiki/doku.php?id=home'
   s.add_runtime_dependency 'rest-client', '~> 1.6.7'
   s.add_runtime_dependency 'json', '~> 1.6.5'
+  s.add_runtime_dependency 'roo', '~> 1.10.1'
   s.executables << 'app47'
 end
 

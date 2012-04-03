@@ -1,7 +1,7 @@
 require 'app47/cli/usage_error.rb'
-
 require 'yaml'
 
+require 'pry'
 
 module App47
   module CLI
@@ -20,6 +20,7 @@ module App47
       #
       # :apiKey
       # :appId
+      # :apiHost
       # 
       def read_rc_file
         
@@ -34,6 +35,8 @@ module App47
 
       def initialize
         @options = {}
+
+        @options[:apiHost] = "https://cirrus.app47.com" # The default
         
         read_rc_file
       end

@@ -1,5 +1,6 @@
 require 'app47/cli/symbol_hash.rb'
 require 'app47/cli/builds.rb'
+require 'app47/cli/users.rb'
 require 'app47/cli/usage_error.rb'
 
 module App47
@@ -13,7 +14,8 @@ module App47
       end      
       
       self.commands = SymbolHash[
-        :builds => Builds
+        :builds => Builds,
+        :users => Users
         ]
       
       def commands

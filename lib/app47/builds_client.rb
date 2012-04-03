@@ -1,10 +1,7 @@
 require 'rest-client'
 require 'json'
+require 'app47/client.rb'
 
-
-$app_url = "https://cirrus.app47.com"
-
-# TODO: replace the puts calls with exceptions
 
 module App47
 
@@ -28,15 +25,14 @@ module App47
   #   client = App47BuildClient.new( 'your-api-token', 'an-app-id', :ios)
   #   client.read 
   #
-  class BuildsClient
+  class BuildsClient < Client
 
-    attr_accessor :apiToken, :appId, :platform
+    attr_accessor :appId, :platform
 
     # @param [String] apiToken your App47 api token
     # @param [String] appId the application on which you will be referencing builds
     # @param [Symbol] platform this app's platform (see {BuildPlatform}) 
-    def initialize( apiToken, appId, platform = :ios)
-      @apiToken = apiToken
+    def initialize( appId, platform = :ios)
       @appId = appId
       @platform = BuildPlatform.to_json( platform)
     end
@@ -61,7 +57,7 @@ module App47
         }
 
         begin
-          response = RestClient.post $app_url + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @apiToken, :accept => :json}
+          response = RestClient.post @options[:apiHost] + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @apiToken, :accept => :json}
         rescue => err
           raise RuntimeError.new( "HTTP connection error: #{err.message}")
         end
@@ -82,7 +78,7 @@ module App47
       path = "/api/apps/#{appId}/builds"
       path = path << "/#{buildId}" if buildId != nil
 
-      url = $app_url + path
+      url = @options[:apiHost] + path
 
       begin
         response = RestClient.get url, { 'X-Token' => @apiToken, :accept => :json}
