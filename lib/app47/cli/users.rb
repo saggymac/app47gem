@@ -26,9 +26,9 @@ module App47
           @options[:bulkFile] = bulkFile
         }
 
-        @options[:active] = false
+        @options[:autoApprove] = false
         op.on( '--autoAccept', 'auto accept device identifiers (default:no)') {
-          @options[:active] = true
+          @options[:autoApprove] = true
         }
 
         op.on( '-eMANDATORY', '--email=MANDATORY', 'email for the user being created') { |email|
@@ -67,12 +67,15 @@ module App47
 
           filename = @options[:bulkFile]
 
-          if filename == nil
-
-            #TODO: validate the other params
+          if filename.nil?
+            # If no filename, must have user and email
+            user = @options[:userName]
+            raise UsageError.new( "no user name provided") if user.nil?
+            
+            email = @options[:email]
+            raise UsageError.new( "no email address provided") if email.nil?
 
           else
-            raise UsageError.new( 'missing bulk file parameter') if filename == nil
             raise UsageError.new( "bulk file does not exist: #{filename}") unless File.exists?( filename)
           end
 
@@ -101,6 +104,34 @@ module App47
 
         resp = client.read( uid)
         print_json resp
+      end
+      
+      
+      
+      def create ()
+        users_validate
+        
+        client = UsersClient.new
+        client.api_token = @options[:apiKey]
+        client.app_url = @options[:apiHost]
+
+        
+        filename = @options[:bulkFile]        
+        
+        if filename.nil?
+
+          user = App47::User.new
+          user.name = @options[:userName]
+          user.email = @options[:email]
+          user.auto_approve = @options[:autoApprove]
+          
+          client.create( user)          
+          
+        else
+
+          client.bulk_upload( filename)
+          
+        end
       end
 
 
