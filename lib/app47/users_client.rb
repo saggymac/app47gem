@@ -2,7 +2,12 @@ require 'rest-client'
 require 'json'
 require 'app47/client.rb'
 require 'roo'
-require 'csv'
+
+unless defined?( CSV)
+  require 'fastercsv'
+end
+
+
 require 'pry'
 
 module App47
@@ -40,7 +45,13 @@ module App47
     def parse_csv(bulk_file)
       users = []
 
-      CSV.foreach(bulk_file) do |row|
+      if defined?( CSV)
+        clss = CSV
+      else
+        clss = FasterCSV
+      end
+
+      clss.foreach(bulk_file) do |row|
         name = row[0]
         email = row[1]
         auto = row[2]
@@ -102,7 +113,6 @@ module App47
 
       json = {:user => {:name => user.name, :email => user.email, :auto_approved => user.auto_approve}}.to_json
 
-      RestClient.proxy  = "http://localhost:8888/"
       response = RestClient.post url, json, {"X-Token" => @api_token, :accept => :json, :content_type => :json}
 
       json_obj = nil
