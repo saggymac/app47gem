@@ -120,11 +120,8 @@ module App47
         
         if filename.nil?
 
-          user = App47::User.new
-          user.name = @options[:userName]
-          user.email = @options[:email]
-          user.auto_approve = @options[:autoApprove]
-          
+          user = App47::User.new( @options[:userName], @options[:email], @options[:autoApprove])
+
           client.create( user)          
           
         else

@@ -57,7 +57,7 @@ module App47
         }
 
         begin
-          response = RestClient.post @options[:apiHost] + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @apiToken, :accept => :json}
+          response = RestClient.post @app_url + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @apiToken, :accept => :json}
         rescue => err
           raise RuntimeError.new( "HTTP connection error: #{err.message}")
         end
@@ -78,7 +78,7 @@ module App47
       path = "/api/apps/#{appId}/builds"
       path = path << "/#{buildId}" if buildId != nil
 
-      url = @options[:apiHost] + path
+      url = @app_url + path
 
       begin
         response = RestClient.get url, { 'X-Token' => @apiToken, :accept => :json}

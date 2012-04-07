@@ -36,7 +36,7 @@ module App47
       # @return [void]
       def run (*args)
         # TODO: add help support
-        if ( args.size == 0 )
+        if args.size == 0
           # TODO: print usage
         else
           cmd = args.first.to_sym
