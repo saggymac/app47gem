@@ -49,15 +49,17 @@ module App47
 
       # @throws [UsageError] if there is an error with the parameters
       def groups_validate
+
         validate() # call the super, to validate generic args
+
 
         if @command == :read
           gid = @options[:groupId]
           raise UsageError.new('invalid group id') if gid && gid.length <= 0
         end
 
-        if @command == :create
 
+        if @command == :create
           # required values are name. but can add description.
 
           name = @options[:name]
@@ -65,10 +67,8 @@ module App47
 
         end
 
+
         if @command == :find
-
-          # required values are name. but can add description.
-
           name = @options[:name]
           raise UsageError.new("you must specify the name of a group to find") if name.nil?
 
@@ -88,7 +88,6 @@ module App47
         client.api_token = @options[:apiKey]
         client.app_url = @options[:apiHost]
 
-
         resp = client.read( gid)
         print_json resp
       end
@@ -103,13 +102,10 @@ module App47
         client.api_token = @options[:apiKey]
         client.app_url = @options[:apiHost]
 
-
         resp = client.find_group_by_name( group_name)
         print_json resp
       end
 
-
-      5
       
       def create ()
         groups_validate

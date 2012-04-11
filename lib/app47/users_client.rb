@@ -8,17 +8,16 @@ unless defined?( CSV)
 end
 
 
-require 'pry'
-
 module App47
 
   class User
-    attr_accessor :name, :email, :auto_approve
+    attr_accessor :name, :email, :auto_approve, :group_ids
 
     def initialize(name, email, auto_approve)
       @name = name
       @email = email
       @auto_approve = auto_approve
+      @group_ids = []
     end
 
     def to_s
@@ -111,7 +110,12 @@ module App47
 
       url = @app_url + "/api/users"
 
-      json = {:user => {:name => user.name, :email => user.email, :auto_approved => user.auto_approve}}.to_json
+      json_obj = {:name => user.name, :email => user.email, :auto_approved => user.auto_approve}
+      unless user.group_ids.empty?
+        json_obj["group_ids"] = user.group_ids
+      end
+
+      json = {:user => json_obj}.to_json
 
       response = RestClient.post url, json, {"X-Token" => @api_token, :accept => :json, :content_type => :json}
 
@@ -129,10 +133,17 @@ module App47
 
 
     #
+    # The spreadsheet has a few requirements. At present, it supports three columns, in this order:
+    #  1) user name
+    #  2) email
+    #  3) auto approve (device registrations)
+    #
+    #  Same is true regardless of whether you are using a CSV, .xls, .xlsx, or otherwise.
+    #
     # @param [File] bulk_file the spreadsheet file to parse, and send up to the server
     # @return [UsersClient] returns self
     #
-    def bulk_upload(bulk_file)
+    def bulk_upload(bulk_file, group_ids=nil)
 
       users = parse bulk_file
 
@@ -140,6 +151,8 @@ module App47
       return if users.count <= 0
 
       users.each do |user|
+        user.group_ids = group_ids unless group_ids.nil?
+
         create user
       end
 

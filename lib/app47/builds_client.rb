@@ -66,7 +66,6 @@ module App47
           jobj = JSON.parse( response.body.to_s)
         else
           raise RuntimeError.new( "Invalid response: #{response.code.to_s}")
-          nil
         end
     end
 

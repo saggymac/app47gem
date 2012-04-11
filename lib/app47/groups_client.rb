@@ -74,6 +74,9 @@ module App47
     end
 
 
+    #
+    # TODO: enhance this to take an optional array
+    #
     def find_group_by_name(group_name_to_match)
 
       return nil if group_name_to_match.nil?
@@ -94,6 +97,40 @@ module App47
       matched_group
     end
 
+    #
+    # The group_names array can be regular expressions, but we don't expend any effort
+    # to handle the case when the regular expression does not uniquely match
+    #
+    # @param group_names [Array] an list of group name patterns to match against the list of groups
+    #    for the specified account.
+    # @return [Set] returns the set of matched groups based on the patterns given in group_names
+    #
+    def determine_group_ids(group_names)
+      return nil if group_names.nil?
+      return nil if group_names.count <= 0
+
+      groups_json = read
+      return nil if groups_json.nil?
+
+      matched_groups = Set.new
+
+      groups_json.each do |group|
+
+        group_name = group["name"]
+
+        # TODO: I'm going to bet that adding a group object to the Set will not
+        #   work as I'd like.
+        group_names.each do |group_name_to_match|
+          if group_name
+            m = group_name.match(/#{group_name_to_match}/)
+            matched_groups.add(group) if m[0] == group_name_to_match
+          end
+        end
+
+      end
+
+      matched_groups
+    end
 
     #
     # Read groups from the API
