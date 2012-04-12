@@ -33,13 +33,23 @@ module App47
       def initialize
         
       end
+      
+      def usage
+        puts "Usage: app47 <cmd> (-h | <options>)"
+        puts "Valid commands: "
+        
+        self.commands.each do |key,value|
+          puts "\t#{key}"
+        end
+        
+        puts ""        
+      end
 
       # Runs the app
       # @return [void]
       def run (*args)
-        # TODO: add help support
         if args.size == 0
-          # TODO: print usage
+          usage
         else
           cmd = args.first.to_sym
           args.shift        
@@ -52,7 +62,7 @@ module App47
               puts "ERROR: #{error.inspect}"
             end
           else
-            puts "wut u doin?"            
+            usage
           end          
           
         end
