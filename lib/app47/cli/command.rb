@@ -1,8 +1,6 @@
 require 'app47/cli/usage_error.rb'
 require 'yaml'
 
-require 'pry'
-
 module App47
   module CLI
 

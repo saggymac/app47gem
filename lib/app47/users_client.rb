@@ -112,12 +112,16 @@ module App47
 
       json_obj = {:name => user.name, :email => user.email, :auto_approved => user.auto_approve}
       unless user.group_ids.empty?
-        json_obj["group_ids"] = user.group_ids
+        json_obj[:group_ids] = user.group_ids
       end
 
       json = {:user => json_obj}.to_json
 
-      response = RestClient.post url, json, {"X-Token" => @api_token, :accept => :json, :content_type => :json}
+      begin
+        response = RestClient.post url, json, {"X-Token" => @api_token, :accept => :json, :content_type => :json}
+      rescue => e
+        raise RuntimeError.new("Error response: #{e.response.code.to_s}: #{e.response}")
+      end
 
       json_obj = nil
 

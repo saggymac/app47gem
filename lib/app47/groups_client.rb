@@ -2,7 +2,6 @@ require 'rest-client'
 require 'json'
 require 'app47/client.rb'
 
-
 #
 # http://app47.com/wiki/doku.php?id=account_mgmt_api:groups
 #
@@ -74,9 +73,6 @@ module App47
     end
 
 
-    #
-    # TODO: enhance this to take an optional array
-    #
     def find_group_by_name(group_name_to_match)
 
       return nil if group_name_to_match.nil?
@@ -121,16 +117,17 @@ module App47
         # TODO: I'm going to bet that adding a group object to the Set will not
         #   work as I'd like.
         group_names.each do |group_name_to_match|
-          if group_name
-            m = group_name.match(/#{group_name_to_match}/)
-            matched_groups.add(group) if m[0] == group_name_to_match
-          end
+
+          m = group_name.match(/#{group_name_to_match}/)
+          matched_groups.add(group) unless m.nil?
+
         end
 
       end
 
       matched_groups
     end
+
 
     #
     # Read groups from the API

@@ -4,7 +4,8 @@ require 'app47/cli/usage_error.rb'
 require 'app47/users_client.rb'
 require 'app47/groups_client.rb'
 require 'json'
-require 'json_helpers.rb'
+require 'app47/cli/json_helpers.rb'
+
 
 module App47
   module CLI
@@ -24,8 +25,8 @@ module App47
       def define_opts( op )
         super( op)
 
-        op.on( '-fMANDATORY', '--file=MANDATORY', 'path to the bulk file (spreadsheet)') { |bulkFile|
-          @options[:bulkFile] = bulkFile
+        op.on( '-fMANDATORY', '--file=MANDATORY', 'path to the bulk file (spreadsheet)') { |bulk_file|
+          @options[:bulkFile] = bulk_file
         }
 
         @options[:autoApprove] = false
@@ -45,7 +46,7 @@ module App47
           @options[:userId] = user_id
         }
 
-        op.on( '', '--groups=MANDATORY', 'a semicolon separated list of group names to be assigned to the user') { |groups|
+        op.on( '-gMANDATORY', '--groups=MANDATORY', 'a semicolon separated list of group names to be assigned to the user') { |groups|
           @options[:groups] = groups
         }
 
@@ -125,14 +126,22 @@ module App47
       # @return [Array] returns the array of matched and approved group IDs. If the user does not approve
       #   or there was an error, we return nothing.
       def lookup_and_approve_groups( group_patterns )
+        return nil if group_patterns.nil?
+        return nil if group_patterns.empty?
+
         groups_client = GroupsClient.new
         groups_client.api_token = @options[:apiKey]
         groups_client.app_url = @options[:apiHost]
 
         matched_groups = groups_client.determine_group_ids( group_patterns)
 
-        group_ids = nil
-        unless matched_groups.nil?
+        group_ids = []
+
+        if matched_groups.nil? || matched_groups.empty?
+          puts "No groups matched"
+        else
+
+          group_names = []
           matched_groups.each do |group|
             group_names.push(group["name"])
           end
@@ -140,11 +149,11 @@ module App47
           puts "Please review the matched groups: " + group_names.join( ', ')
           puts "Continue? (y/n)"
 
-          response = gets
+          response = STDIN.gets.chomp
 
           if response[0].downcase == 'y'
             matched_groups.each do |group|
-              group_ids(group["_id"])
+              group_ids.push(group["_id"])
             end
           end
 
@@ -179,7 +188,7 @@ module App47
             user.group_ids = approved_group_ids
           end
 
-          client.create( user)          
+          client.create( user)
           
         else
           client.bulk_upload( filename, approved_group_ids)
