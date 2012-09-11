@@ -101,8 +101,8 @@ module App47
         bid = @options[:buildId]
 
         client = BuildsClient.new( @options[:appId], @options[:platform])
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
 
         resp = client.read( bid)
         print_json resp
@@ -129,8 +129,8 @@ module App47
         builds_validate
 
         client = BuildsClient.new( @options[:appId], @options[:platform])
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
 
         vers = @options[:version]
         raise RuntimeError.new( "Version #{vers} already exists") if build_exists?( client, vers)
@@ -170,13 +170,13 @@ module App47
           puts "EXAMPLES"
           puts ""
           puts "Reading the list of builds for an app:"
-          puts "  app47 builds read -k <apiKey> -a appId"
+          puts "  app47 builds read -k <api_token> -a appId"
           puts ""          
           puts "Reading a specific build:"
-          puts "  app47 builds read -k <apiKey> -a appId -b buildId"
+          puts "  app47 builds read -k <api_token> -a appId -b buildId"
           puts ""          
           puts "Creating a new build (e.g., posting a build):"
-          puts "  app47 builds create -k <apiKey> -a appId -V vers -f buildFilePath [-n notes] [--makeActive]"
+          puts "  app47 builds create -k <api_token> -a appId -V vers -f buildFilePath [-n notes] [--makeActive]"
         else                
           puts op.help unless handled
         end

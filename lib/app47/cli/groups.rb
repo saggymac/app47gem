@@ -85,8 +85,8 @@ module App47
         gid = @options[:groupId]
 
         client = GroupsClient.new
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
 
         resp = client.read( gid)
         print_json resp
@@ -99,8 +99,8 @@ module App47
         group_name = @options[:name]
 
         client = GroupsClient.new
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
 
         resp = client.find_group_by_name( group_name)
         print_json resp
@@ -111,8 +111,8 @@ module App47
         groups_validate
         
         client = GroupsClient.new
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
 
         group = App47::Group.new(@options[:name], @options[:description])
 
@@ -147,13 +147,13 @@ module App47
           puts "EXAMPLES"
           puts ""
           puts "Reading the list of groups, or a single group for an account:"
-          puts "  app47 groups read -k <apiKey> [-g groupId]"
+          puts "  app47 groups read -k <api_token> [-g groupId]"
           puts ""          
           puts "Creating a new group:"
-          puts "  app47 groups create -k <apiKey> -n <name> [-d <description>]"
+          puts "  app47 groups create -k <api_token> -n <name> [-d <description>]"
           puts ""
           puts "Find a group by name:"
-          puts "  app47 groups find -k <apiKey> -n <name>"
+          puts "  app47 groups find -k <api_token> -n <name>"
         else                
           puts op.help unless handled
         end

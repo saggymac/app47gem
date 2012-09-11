@@ -29,7 +29,7 @@ module App47
 
     attr_accessor :appId, :platform
 
-    # @param [String] apiToken your App47 api token
+    # @param [String] api_token your App47 api token
     # @param [String] appId the application on which you will be referencing builds
     # @param [Symbol] platform this app's platform (see {BuildPlatform}) 
     def initialize( appId, platform = :ios)
@@ -57,7 +57,7 @@ module App47
         }
 
         begin
-          response = RestClient.post @app_url + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @apiToken, :accept => :json}
+          response = RestClient.post @app_url + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @api_token, :accept => :json}
         rescue => err
           raise RuntimeError.new( "HTTP connection error: #{err.message}")
         end
@@ -80,7 +80,7 @@ module App47
       url = @app_url + path
 
       begin
-        response = RestClient.get url, { 'X-Token' => @apiToken, :accept => :json}
+        response = RestClient.get url, { 'X-Token' => @api_token, :accept => :json}
       rescue => err
         raise RuntimeError.new( "HTTP connection error: #{err.message}")
       end
