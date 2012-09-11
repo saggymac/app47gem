@@ -109,8 +109,8 @@ module App47
         uid = @options[:userId]
 
         client = UsersClient.new
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
 
 
         resp = client.read( uid)
@@ -130,8 +130,8 @@ module App47
         return nil if group_patterns.empty?
 
         groups_client = GroupsClient.new
-        groups_client.api_token = @options[:apiKey]
-        groups_client.app_url = @options[:apiHost]
+        groups_client.api_token = @options[:api_token]
+        groups_client.app_url = @options[:app_url]
 
         matched_groups = groups_client.determine_group_ids( group_patterns)
 
@@ -168,8 +168,8 @@ module App47
         users_validate
         
         client = UsersClient.new
-        client.api_token = @options[:apiKey]
-        client.app_url = @options[:apiHost]
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
         
         filename = @options[:bulkFile]
 
@@ -223,10 +223,10 @@ module App47
           puts "EXAMPLES"
           puts ""
           puts "Reading the list of users, or a single user for an account:"
-          puts "  app47 users read -k <apiKey> [-u userId]"
+          puts "  app47 users read -k <api_token> [-u userId]"
           puts ""          
           puts "Creating a new user (single, or bulk through a file:"
-          puts "  app47 users create -k <apiKey> (-f <bulkFile> | -u <userName> -e <email> [--autoAccept]) [--groups=]"
+          puts "  app47 users create -k <api_token> (-f <bulkFile> | -u <userName> -e <email> [--autoAccept]) [--groups=]"
         else                
           puts op.help unless handled
         end

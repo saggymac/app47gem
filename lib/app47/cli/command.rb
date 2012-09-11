@@ -16,9 +16,9 @@ module App47
       #
       # Document this so folks know what options are supported in the RC file.
       #
-      # :apiKey
+      # :api_token
       # :appId
-      # :apiHost
+      # :app_url
       # 
       def read_rc_file
         
@@ -34,7 +34,7 @@ module App47
       def initialize
         @options = {}
 
-        @options[:apiHost] = "https://cirrus.app47.com" # The default
+        @options[:app_url] = "https://cirrus.app47.com" # The default
         
         read_rc_file
       end
@@ -48,8 +48,8 @@ module App47
         op.separator "  builds"
         op.separator ""
 
-        op.on( '-kMANDATORY', '--apiKey=MANDATORY', 'your app47 api key') do |apiKey|
-          @options[:apiKey] = apiKey
+        op.on( '-kMANDATORY', '--api_token=MANDATORY', 'your app47 api key') do |api_token|
+          @options[:api_token] = api_token
         end
 
         op.on( '-h', '--help', 'display help') {|help|
@@ -60,7 +60,7 @@ module App47
 
 
       def validate
-        k = @options[:apiKey]
+        k = @options[:api_token]
 
         raise UsageError.new("missing api key") unless k && k.length > 0
       end
