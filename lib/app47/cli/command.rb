@@ -16,7 +16,7 @@ module App47
       #
       # Document this so folks know what options are supported in the RC file.
       #
-      # :api_key
+      # :api_token
       # :appId
       # :app_url
       # 
