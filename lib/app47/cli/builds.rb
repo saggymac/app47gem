@@ -34,13 +34,12 @@ module App47
           @options[:notes] = notes
         }
 
-        @options[:active] = false
+        @options[:makeActive] = false
         op.on( '--makeActive', 'make this build active (default:no)') {
-          @options[:active] = true
+          @options[:makeActive] = true
         }
 
-        @options[:platform] = "ios"
-        op.on( '-pMANDATORY', '--platform=MANDATORY', 'the platform for this build (ios or android, defaults to ios') { |platform|
+        op.on( '-pMANDATORY', '--platform=MANDATORY', 'the platform for this build (ios or android') { |platform|
           @options[:platform] = platform.downcase.to_sym
         }
 
@@ -139,7 +138,7 @@ module App47
         raise RuntimeError.new( 'unable to read the build file') if file == nil
 
         # TODO: copy in the polling logic
-        resp = client.create( file, @options[:notes], @options[:makeActive])
+        resp = client.create( file, @options[:notes], @options[:makeActive], @options[:version])
         print_json resp
 
       end

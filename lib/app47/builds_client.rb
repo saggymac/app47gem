@@ -10,7 +10,7 @@ module App47
     # Get the string value expected by the App47 REST API for the various platform symbols
     # @param [Symbol] a platform symbol {include:BuildPlatform}
     # @return [String] the json string value for the given symbol, or empty string
-    def to_json( bp )
+    def BuildPlatform.to_json( bp )
       return "iOS" if bp == :ios
       return "Android" if bp == :android
       ""
@@ -22,7 +22,7 @@ module App47
   #
   # This class wraps the CRUD methods for dealing with builds for a given app.
   # @example Create a client, then use it
-  #   client = App47BuildClient.new( 'your-api-token', 'an-app-id', :ios)
+  #   client = App47BuildClient.new( 'your-api-token', 'an-app-id', 'your-platform')
   #   client.read 
   #
   class BuildsClient < Client
@@ -32,7 +32,7 @@ module App47
     # @param [String] api_token your App47 api token
     # @param [String] appId the application on which you will be referencing builds
     # @param [Symbol] platform this app's platform (see {BuildPlatform}) 
-    def initialize( appId, platform = :ios)
+    def initialize( appId, platform)
       @appId = appId
       @platform = BuildPlatform.to_json( platform)
     end
@@ -43,7 +43,7 @@ module App47
     # @param [String] releaseNotes A blurb describing the bulid; not meant to be too long
     # @param [Boolean] makeActive Indicates whether or not the build should be made the active build or not
     # @return [JSON] returns a json build object on success, or nil on error
-    def create ( file, releaseNotes, makeActive=false )
+    def create ( file, releaseNotes, makeActive=false, version="noversion" )
       fileName = File.basename( file.path)
 
       build_doc = {
@@ -53,8 +53,10 @@ module App47
           :upload => file,
           :build_file => fileName,
           :release_notes => (releaseNotes!=nil) ? releaseNotes : '',
-          :active => makeActive }
+          :active => makeActive,
+          :version => version
         }
+      }
 
         begin
           response = RestClient.post @app_url + "/api/apps/#{@appId}/builds",  build_doc, {'X-Token' => @api_token, :accept => :json}
