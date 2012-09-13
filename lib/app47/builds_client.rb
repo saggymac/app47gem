@@ -43,13 +43,13 @@ module App47
     # @param [String] releaseNotes A blurb describing the bulid; not meant to be too long
     # @param [Boolean] makeActive Indicates whether or not the build should be made the active build or not
     # @return [JSON] returns a json build object on success, or nil on error
-    def create ( file, releaseNotes, makeActive=false, version="noversion" )
+    def create ( file, releaseNotes, makeActive=false, version="noversion", environment="Test" )
       fileName = File.basename( file.path)
 
       build_doc = {
         :build => {
           :platform => @platform,
-          :environment => "Test", # TODO: doesn't matter for iOS, but will for Android'
+          :environment => environment,
           :upload => file,
           :build_file => fileName,
           :release_notes => (releaseNotes!=nil) ? releaseNotes : '',
