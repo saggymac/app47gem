@@ -34,7 +34,7 @@ module App47
       def initialize
         @options = {}
 
-        @options[:app_url] = "https://cirrus.app47.com" # The default
+        @options[:app_url] = 'https://cirrus.app47.com' # The default
         
         read_rc_file
       end
@@ -42,17 +42,17 @@ module App47
 
       # @param [OptionParser] op the option parser      
       def define_opts( op )
-        op.banner = "Usage: app47 command [options]"
-        op.separator ""
-        op.separator "Valid commands:"
-        op.separator "  builds"
-        op.separator ""
+        op.banner = 'Usage: app47 command [options]'
+        op.separator ''
+        op.separator 'Valid commands:'
+        op.separator '  builds'
+        op.separator ''
 
         op.on( '-kMANDATORY', '--api_token=MANDATORY', 'your app47 api key') do |api_token|
           @options[:api_token] = api_token
         end
 
-        op.on( '-h', '--help', 'display help') {|help|
+        op.on( '-h', '--help', 'display help') {
           @options[:help] = true
         }
 
@@ -62,7 +62,10 @@ module App47
       def validate
         k = @options[:api_token]
 
-        raise UsageError.new("missing api key") unless k && k.length > 0
+        if k.nil?
+          raise UsageError.new( 'missing api key')
+        end
+
       end
 
 

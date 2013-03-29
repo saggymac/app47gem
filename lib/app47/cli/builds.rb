@@ -117,7 +117,7 @@ module App47
         exists = false
 
         builds.each { |build|
-          vers = build["version"]
+          vers = build['version']
           if vers == version
             exists = true
             break
@@ -126,6 +126,41 @@ module App47
 
         exists
       end
+
+
+      # like read, but selective about what it prints
+      def list
+        builds_validate
+
+        bid = @options[:buildId]
+
+        client = BuildsClient.new( @options[:appId], @options[:platform])
+        client.api_token = @options[:api_token]
+        client.app_url = @options[:app_url]
+
+        resp = client.read( bid)
+
+        # Selectively print the build version, date, and file download url
+        # in reverse chronological order
+
+        resp.each { |build|
+          puts ''
+
+          printf('%-10s %-14.10s',
+                 build['version'],
+                 build['updated_at'])
+
+          puts ''
+          puts ''
+          puts build['file_url']
+          puts ''
+          puts build['release_notes']
+          puts ''
+          puts '----'
+        }
+
+      end
+
 
       def create
         builds_validate
@@ -166,19 +201,22 @@ module App47
         end
         
         if @options[:help] || !handled
-          puts "Usage: app47 builds subcmd [options]"
-          puts "Sub commands: create read"
-          puts ""
-          puts "EXAMPLES"
-          puts ""
-          puts "Reading the list of builds for an app:"
-          puts "  app47 builds read -k <api_token> -a appId"
-          puts ""          
-          puts "Reading a specific build:"
-          puts "  app47 builds read -k <api_token> -a appId -b buildId"
-          puts ""          
-          puts "Creating a new build (e.g., posting a build):"
-          puts "  app47 builds create -k <api_token> -a appId -V vers -f buildFilePath [-n notes] [--makeActive]"
+          puts 'Usage: app47 builds subcmd [options]'
+          puts 'Sub commands: create read'
+          puts ''
+          puts 'EXAMPLES'
+          puts ''
+          puts 'Reading the list of builds for an app (raw json dump):'
+          puts '  app47 builds read -k <api_token> -a appId'
+          puts ''          
+          puts 'Reading a specific build:'
+          puts '  app47 builds read -k <api_token> -a appId -b buildId'
+          puts ''
+          puts 'Listing the key details for builds of an app:'
+          puts '  app47 builds list -k <api_token> -a appId'
+          puts ''          
+          puts 'Creating a new build (e.g., posting a build):'
+          puts '  app47 builds create -k <api_token> -a appId -V vers -f buildFilePath [-n notes] [--makeActive]'
         else                
           puts op.help unless handled
         end
